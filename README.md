@@ -56,9 +56,6 @@ Exemple avec les 5 films de départ :
 | `IN` | Science-fiction | Inception |
 | *(vide)* | Science-fiction | Matrix, Inception |
 
-## 7. La touche Échap
-
-- Dans le champ de recherche, la touche **Échap** vide la recherche, et la liste est mise à jour.
 
 ## Bonus ⭐
 
