@@ -64,6 +64,14 @@ function creationElementDOM(film) {
     const li = document.createElement("li");
     li.classList.add("film");
     li.dataset.genre = film.genre;
+    li.addEventListener("mouseenter", () => {
+        const info = document.querySelector('#info');
+        info.textContent = film.genre
+    })
+    li.addEventListener("mouseleave", () => {
+        const info = document.querySelector('#info');
+        info.textContent = "";
+    })
     
     if(film.vu) {
         li.classList.add("vu");
