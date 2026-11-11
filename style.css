@@ -1,0 +1,80 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f8;
+  color: #222;
+}
+
+main {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+form,
+.filtres {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+input,
+select,
+button {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+#titre,
+#recherche {
+  flex: 1;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+}
+
+.film {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: white;
+  padding: 0.75rem;
+  margin-bottom: 0.5rem;
+  border-left: 5px solid #ccc;
+  border-radius: 4px;
+}
+
+.sf {
+  border-color: #6c5ce7;
+}
+
+.titre {
+  flex: 1;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.genre {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.vu .titre {
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.cache {
+  display: none;
+}
+
+#info {
+  color: #666;
+  min-height: 1.5rem;
+}
