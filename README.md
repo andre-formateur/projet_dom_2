@@ -2,9 +2,11 @@
 
 Vous reprenez votre projet de la partie 1 et vous le rendez interactif : ajout de films, marquage « vu », recherche et filtre par genre.
 
-Gardez les mêmes fichiers (`index.html`, `style.css`, `script.js`). Le HTML et le CSS ne changent pas : vous n'écrivez que du JavaScript.
+Gardez les mêmes fichiers (`index.html`, `style.css`, `script.js`). Le HTML et le CSS ne changent pas : vous n'écrivez que du JavaScript. 
 
-**Point de départ :** Le code de ce dépot. 
+Vous pouvez réorganiser le Javascript en rajoutant de nouveaux fichiers `.js`.
+
+**Point de départ :** Le code de ce dépot.
 
 ---
 
