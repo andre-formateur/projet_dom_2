@@ -9,12 +9,15 @@ const films = [
 // Les constantes globals
 const liste = document.querySelector("#liste");
 const formulaire = document.querySelector("#formulaire");
+const recherche = document.querySelector("#recherche");
+const filtreSelect = document.querySelector("#filtre-genre");
 
 // Au chargement de la page
 films.forEach(film => creationElementDOM(film))
 refreshCompteur(films)
 
 // Les eventListeners
+// Création d'un film
 formulaire.addEventListener("submit", (event) => {
     // On bloque le comportement par défault du formulaire
     event.preventDefault();
@@ -48,6 +51,11 @@ formulaire.addEventListener("submit", (event) => {
     titre.value = "";
 })
 
+// Filtrer les films par saisie
+recherche.addEventListener("input", () => searchFilters())
+
+// Filtrer les films par genre
+filtreSelect.addEventListener("change", () => searchFilters())
 
 // Nos functions
 function creationElementDOM(film) {
@@ -55,6 +63,7 @@ function creationElementDOM(film) {
     // Créer le li général
     const li = document.createElement("li");
     li.classList.add("film");
+    li.dataset.genre = film.genre;
     
     if(film.vu) {
         li.classList.add("vu");
@@ -68,6 +77,18 @@ function creationElementDOM(film) {
     const titre = document.createElement("span");
     titre.classList.add("titre");
     titre.textContent = film.titre;
+    titre.addEventListener("click", () => {
+        
+        // Afficher l'élément barré dans le navigateur
+        li.classList.toggle("vu");
+
+        // Modifier le vu dans la liste
+        film.vu = !film.vu
+
+        // Rafraichir le compteur
+        refreshCompteur(films)
+
+    })
 
     // Créer le genre
     const genre = document.createElement("span");
@@ -108,4 +129,30 @@ function refreshCompteur(data) {
                         .length
 
     compteur.textContent = `${data.length} film(s), dont ${viewFilm} vu(s)`
+}
+
+function searchFilters() {
+
+    // Récupérer les saisies
+    const saisie = recherche.value;
+    const genre = filtreSelect.value;
+
+    // Récupération des résultats
+    const resultat = films.filter(film => {
+        return (
+            (film.titre.toLowerCase().includes(saisie.toLowerCase())) &&
+            (film.genre === genre || genre === "tous")
+        );
+    })
+
+    // Cacher les films qui n'ont pas le bon genre ET le bon titre
+    const list = document.querySelectorAll("#liste li");
+
+    list.forEach(li => {
+        li.classList.add("cache");
+        if(resultat.find(film => film.titre === li.firstElementChild.textContent)) {
+            li.classList.remove("cache")
+        }
+    })
+
 }
