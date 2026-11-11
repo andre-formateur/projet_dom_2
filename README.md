@@ -56,10 +56,6 @@ Exemple avec les 5 films de départ :
 | `IN` | Science-fiction | Inception |
 | *(vide)* | Science-fiction | Matrix, Inception |
 
-## 7. La touche Échap
-
-- Dans le champ de recherche, la touche **Échap** vide la recherche, et la liste est mise à jour.
-
 ## Bonus ⭐
 
 - Au **survol** d'un film, le paragraphe `#info` affiche `Genre : Animation` (avec le genre du film survolé). Quand la souris quitte le film, le message disparaît.
