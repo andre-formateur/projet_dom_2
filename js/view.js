@@ -1,11 +1,10 @@
 import { buildMovieItem } from "./builder.js";
-import { getAllMovies, checkMovie, deleteMovie } from "./model.js";
+import { getAllMovies, checkMovie, setMovie, deleteMovie, filterMovies } from "./model.js";
 
 // Les constantes globals
-const movieList = document.querySelector("#movie-list");
 const movieForm = document.querySelector("#movie-form");
-const searchInput = document.querySelector("#search-input");
-const genreFilter = document.querySelector("#genre-filter");
+const searchInput = document.querySelector("#search-input")
+const genreFilter = document.querySelector("#genre-filter")
 
 // Function
 function onPageLoad() {
@@ -19,7 +18,7 @@ function createMovieElement(movie) {
     const li = buildMovieItem(movie, onMouseEnterItem, onMouseLeaveItem, onDeleteItem, onCheckItem)
 
     // Mettre le li dans le ul
-    movieList.appendChild(li);
+    document.querySelector("#movie-list").appendChild(li);
 
 }
 
@@ -41,8 +40,7 @@ function onDeleteItem(li, movie) {
     deleteMovie(movie)
 
     // Rafraichit le compteur
-    const movies = getAllMovies();
-    updateCounter(movies)
+    updateCounter()
 }
 
 function onCheckItem(li, movie) {
@@ -54,13 +52,14 @@ function onCheckItem(li, movie) {
     checkMovie(movie);
 
     // Rafraichir le compteur
-    const movies = getAllMovies()
-    updateCounter(movies)
+    updateCounter()
 
 }
 
-function updateCounter(movies) {
+function updateCounter() {
     // Créer le compteur
+    const movies = getAllMovies();
+
     const counter = document.querySelector("#counter");
     const watchedCount = movies
                         .filter(movie => movie.watched)
@@ -76,12 +75,7 @@ function applyFilters() {
     const selectedGenre = genreFilter.value;
 
     // Récupération des résultats
-    const filteredMovies = movies.filter(movie => {
-        return (
-            (movie.title.toLowerCase().includes(searchValue.toLowerCase())) &&
-            (movie.genre === selectedGenre || selectedGenre === "tous")
-        );
-    })
+    const filteredMovies = filterMovies(searchValue, selectedGenre)
 
     // Cacher les films qui n'ont pas le bon genre ET le bon titre
     const movieItems = document.querySelectorAll("#movie-list li");
@@ -121,13 +115,13 @@ movieForm.addEventListener("submit", (event) => {
     }
 
     // Ajouter le films en BDD
-    movies.push(movie);
+    setMovie(movie)
 
     // Créer l'élément du DOM
     createMovieElement(movie);
 
     // Rafraichir le compteur
-    updateCounter(movies);
+    updateCounter();
 
     titleInput.value = "";
 })
