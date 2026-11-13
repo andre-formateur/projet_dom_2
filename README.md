@@ -1,1 +1,1 @@
-# Créer l'architecture "BMV" du projet
+# Créer l'architecture "MVC" du projet
