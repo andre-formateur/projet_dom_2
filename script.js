@@ -1,107 +1,107 @@
-const films = [
-  { titre: "Matrix", genre: "Science-fiction", vu: true },
-  { titre: "Le Voyage de Chihiro", genre: "Animation", vu: false },
-  { titre: "Inception", genre: "Science-fiction", vu: false },
-  { titre: "Intouchables", genre: "Comédie", vu: true },
-  { titre: "Gladiator", genre: "Action", vu: false }
+const movies = [
+  { title: "Matrix", genre: "Science-fiction", watched: true },
+  { title: "Le Voyage de Chihiro", genre: "Animation", watched: false },
+  { title: "Inception", genre: "Science-fiction", watched: false },
+  { title: "Intouchables", genre: "Comédie", watched: true },
+  { title: "Gladiator", genre: "Action", watched: false }
 ];
 
 // Les constantes globals
-const liste = document.querySelector("#liste");
-const formulaire = document.querySelector("#formulaire");
-const recherche = document.querySelector("#recherche");
-const filtreSelect = document.querySelector("#filtre-genre");
+const movieList = document.querySelector("#movie-list");
+const movieForm = document.querySelector("#movie-form");
+const searchInput = document.querySelector("#search-input");
+const genreFilter = document.querySelector("#genre-filter");
 
 // Au chargement de la page
-films.forEach(film => creationElementDOM(film))
-refreshCompteur(films)
+movies.forEach(movie => createMovieElement(movie))
+updateCounter(movies)
 
 // Les eventListeners
 // Création d'un film
-formulaire.addEventListener("submit", (event) => {
+movieForm.addEventListener("submit", (event) => {
     // On bloque le comportement par défault du formulaire
     event.preventDefault();
 
     // Créer l'objet du film
-    const titre = document.querySelector("#titre");
-    const genre = document.querySelector("#genre");
+    const titleInput = document.querySelector("#title-input");
+    const genreSelect = document.querySelector("#genre-select");
 
     // Vérifie que titre n'est pas vide
     // S'il est vide, alors le résultat de la fonction sera true
     // Et donc il ne lancera pas le reste de la fonction
-    if(!titre.value.trim()) {
+    if(!titleInput.value.trim()) {
         return;
     }
 
-    const film = {
-        titre: titre.value,
-        genre: genre.value,
-        vu: false
+    const movie = {
+        title: titleInput.value,
+        genre: genreSelect.value,
+        watched: false
     }
 
     // Ajouter le films en BDD
-    films.push(film);
+    movies.push(movie);
 
     // Créer l'élément du DOM
-    creationElementDOM(film);
+    createMovieElement(movie);
 
     // Rafraichir le compteur
-    refreshCompteur(films);
+    updateCounter(movies);
 
-    titre.value = "";
+    titleInput.value = "";
 })
 
 // Filtrer les films par saisie
-recherche.addEventListener("input", () => searchFilters())
+searchInput.addEventListener("input", () => applyFilters())
 
 // Filtrer les films par genre
-filtreSelect.addEventListener("change", () => searchFilters())
+genreFilter.addEventListener("change", () => applyFilters())
 
 // Nos functions
-function creationElementDOM(film) {
+function createMovieElement(movie) {
 
     // Créer le li général
     const li = document.createElement("li");
-    li.classList.add("film");
-    li.dataset.genre = film.genre;
+    li.classList.add("movie");
+    li.dataset.genre = movie.genre;
     li.addEventListener("mouseenter", () => {
-        const info = document.querySelector('#info');
-        info.textContent = film.genre
+        const hoverInfo = document.querySelector('#hover-info');
+        hoverInfo.textContent = movie.genre
     })
     li.addEventListener("mouseleave", () => {
-        const info = document.querySelector('#info');
-        info.textContent = "";
+        const hoverInfo = document.querySelector('#hover-info');
+        hoverInfo.textContent = "";
     })
-    
-    if(film.vu) {
-        li.classList.add("vu");
+
+    if(movie.watched) {
+        li.classList.add("is-watched");
     }
 
-    if(film.genre === "Science-fiction") {
-        li.classList.add("sf")
+    if(movie.genre === "Science-fiction") {
+        li.classList.add("sci-fi")
     }
 
     // Créer le titre
-    const titre = document.createElement("span");
-    titre.classList.add("titre");
-    titre.textContent = film.titre;
-    titre.addEventListener("click", () => {
-        
+    const title = document.createElement("span");
+    title.classList.add("movie-title");
+    title.textContent = movie.title;
+    title.addEventListener("click", () => {
+
         // Afficher l'élément barré dans le navigateur
-        li.classList.toggle("vu");
+        li.classList.toggle("is-watched");
 
         // Modifier le vu dans la liste
-        film.vu = !film.vu
+        movie.watched = !movie.watched
 
         // Rafraichir le compteur
-        refreshCompteur(films)
+        updateCounter(movies)
 
     })
 
     // Créer le genre
     const genre = document.createElement("span");
-    genre.classList.add("genre");
-    genre.textContent = film.genre;
+    genre.classList.add("movie-genre");
+    genre.textContent = movie.genre;
 
     // Bouton de suppression
     const button = document.createElement("button");
@@ -111,55 +111,55 @@ function creationElementDOM(film) {
         li.remove();
 
         // Suppression de l'élément dans la liste de film
-        const key = films.indexOf(film)
-        films.splice(key, 1)
+        const index = movies.indexOf(movie)
+        movies.splice(index, 1)
 
         // Rafraichit le compteur
-        console.log(films)
-        refreshCompteur(films)
+        console.log(movies)
+        updateCounter(movies)
     })
 
     // Assemble le li
-    li.appendChild(titre);
+    li.appendChild(title);
     li.appendChild(genre);
     li.appendChild(button);
 
     // Mettre le li dans le ul
-    liste.appendChild(li);
+    movieList.appendChild(li);
 
 }
 
-function refreshCompteur(data) {
+function updateCounter(movies) {
     // Créer le compteur
-    const compteur = document.querySelector("#compteur");
-    const viewFilm = data
-                        .filter(film => film.vu)
+    const counter = document.querySelector("#counter");
+    const watchedCount = movies
+                        .filter(movie => movie.watched)
                         .length
 
-    compteur.textContent = `${data.length} film(s), dont ${viewFilm} vu(s)`
+    counter.textContent = `${movies.length} film(s), dont ${watchedCount} vu(s)`
 }
 
-function searchFilters() {
+function applyFilters() {
 
     // Récupérer les saisies
-    const saisie = recherche.value;
-    const genre = filtreSelect.value;
+    const searchValue = searchInput.value;
+    const selectedGenre = genreFilter.value;
 
     // Récupération des résultats
-    const resultat = films.filter(film => {
+    const filteredMovies = movies.filter(movie => {
         return (
-            (film.titre.toLowerCase().includes(saisie.toLowerCase())) &&
-            (film.genre === genre || genre === "tous")
+            (movie.title.toLowerCase().includes(searchValue.toLowerCase())) &&
+            (movie.genre === selectedGenre || selectedGenre === "tous")
         );
     })
 
     // Cacher les films qui n'ont pas le bon genre ET le bon titre
-    const list = document.querySelectorAll("#liste li");
+    const movieItems = document.querySelectorAll("#movie-list li");
 
-    list.forEach(li => {
-        li.classList.add("cache");
-        if(resultat.find(film => film.titre === li.firstElementChild.textContent)) {
-            li.classList.remove("cache")
+    movieItems.forEach(li => {
+        li.classList.add("is-hidden");
+        if(filteredMovies.find(movie => movie.title === li.firstElementChild.textContent)) {
+            li.classList.remove("is-hidden")
         }
     })
 

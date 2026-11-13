@@ -9,11 +9,11 @@
 <body>
   <main>
     <h1>🎬 Ma liste de films</h1>
-    <p id="compteur"></p>
+    <p id="counter"></p>
 
-    <form id="formulaire">
-      <input type="text" id="titre" placeholder="Titre du film" required>
-      <select id="genre">
+    <form id="movie-form">
+      <input type="text" id="title-input" placeholder="Titre du film" required>
+      <select id="genre-select">
         <option value="Action">Action</option>
         <option value="Animation">Animation</option>
         <option value="Comédie">Comédie</option>
@@ -23,9 +23,9 @@
       <button type="submit">Ajouter</button>
     </form>
 
-    <div class="filtres">
-      <input type="search" id="recherche" placeholder="Rechercher un film…">
-      <select id="filtre-genre">
+    <div class="filters">
+      <input type="search" id="search-input" placeholder="Rechercher un film…">
+      <select id="genre-filter">
         <option value="tous">Tous les genres</option>
         <option value="Action">Action</option>
         <option value="Animation">Animation</option>
@@ -35,8 +35,8 @@
       </select>
     </div>
 
-    <ul id="liste"></ul>
-    <p id="info"></p>
+    <ul id="movie-list"></ul>
+    <p id="hover-info"></p>
   </main>
 
   <script src="script.js"></script>
