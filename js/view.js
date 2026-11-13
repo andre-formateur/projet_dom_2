@@ -1,3 +1,5 @@
+import { buildMovieItem } from "./builder.js";
+
 const movies = [
   { title: "Matrix", genre: "Science-fiction", watched: true },
   { title: "Le Voyage de Chihiro", genre: "Animation", watched: false },
@@ -60,69 +62,7 @@ genreFilter.addEventListener("change", () => applyFilters())
 // Nos functions
 function createMovieElement(movie) {
 
-    // Créer le li général
-    const li = document.createElement("li");
-    li.classList.add("movie");
-    li.dataset.genre = movie.genre;
-    li.addEventListener("mouseenter", () => {
-        const hoverInfo = document.querySelector('#hover-info');
-        hoverInfo.textContent = movie.genre
-    })
-    li.addEventListener("mouseleave", () => {
-        const hoverInfo = document.querySelector('#hover-info');
-        hoverInfo.textContent = "";
-    })
-
-    if(movie.watched) {
-        li.classList.add("is-watched");
-    }
-
-    if(movie.genre === "Science-fiction") {
-        li.classList.add("sci-fi")
-    }
-
-    // Créer le titre
-    const title = document.createElement("span");
-    title.classList.add("movie-title");
-    title.textContent = movie.title;
-    title.addEventListener("click", () => {
-
-        // Afficher l'élément barré dans le navigateur
-        li.classList.toggle("is-watched");
-
-        // Modifier le vu dans la liste
-        movie.watched = !movie.watched
-
-        // Rafraichir le compteur
-        updateCounter(movies)
-
-    })
-
-    // Créer le genre
-    const genre = document.createElement("span");
-    genre.classList.add("movie-genre");
-    genre.textContent = movie.genre;
-
-    // Bouton de suppression
-    const button = document.createElement("button");
-    button.textContent = "Supprimer"
-    button.addEventListener("click", () => {
-        // Suppression de la <li>
-        li.remove();
-
-        // Suppression de l'élément dans la liste de film
-        const index = movies.indexOf(movie)
-        movies.splice(index, 1)
-
-        // Rafraichit le compteur
-        console.log(movies)
-        updateCounter(movies)
-    })
-
-    // Assemble le li
-    li.appendChild(title);
-    li.appendChild(genre);
-    li.appendChild(button);
+    const li = buildMovieItem(movie)
 
     // Mettre le li dans le ul
     movieList.appendChild(li);
