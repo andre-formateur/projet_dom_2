@@ -1,0 +1,7 @@
+[
+  { "title": "Matrix", "genre": "Science-fiction", "watched": true },
+  { "title": "Le Voyage de Chihiro", "genre": "Animation", "watched": false },
+  { "title": "Inception", "genre": "Science-fiction", "watched": false },
+  { "title": "Intouchables", "genre": "Comédie", "watched": true },
+  { "title": "Gladiator", "genre": "Action", "watched": false }
+]
