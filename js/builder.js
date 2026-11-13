@@ -6,59 +6,26 @@ function buildElement(tag, className, text = false) {
     return element;
 }
 
-export function buildMovieItem(movie) {
+export function buildMovieItem(movie, onMouseEnter, onMouseLeave, onDelete, onCheck) {
     // Créer le li général
     const li = buildElement("li", "movie");
     li.dataset.genre = movie.genre;
-    li.addEventListener("mouseenter", () => {
-        const hoverInfo = document.querySelector('#hover-info');
-        hoverInfo.textContent = movie.genre
-    })
-    li.addEventListener("mouseleave", () => {
-        const hoverInfo = document.querySelector('#hover-info');
-        hoverInfo.textContent = "";
-    })
-
-    if(movie.watched) {
-        li.classList.add("is-watched");
-    }
-
-    if(movie.genre === "Science-fiction") {
-        li.classList.add("sci-fi")
-    }
+    if(movie.watched) { li.classList.add("is-watched"); }
+    if(movie.genre === "Science-fiction") { li.classList.add("sci-fi"); }
+    
+    li.addEventListener("mouseenter", () => onMouseEnter(movie.genre))
+    li.addEventListener("mouseleave", () => onMouseLeave())
 
     // Créer le titre
     const title = buildElement("span", "movie-title", movie.title);
-    title.addEventListener("click", () => {
-
-        // Afficher l'élément barré dans le navigateur
-        li.classList.toggle("is-watched");
-
-        // Modifier le vu dans la liste
-        movie.watched = !movie.watched
-
-        // Rafraichir le compteur
-        updateCounter(movies)
-
-    })
+    title.addEventListener("click", () => onCheck(li, movie))
 
     // Créer le genre
     const genre = buildElement("span", "movie-genre", movie.genre);
 
     // Bouton de suppression
     const button = buildElement("button", "delete", "Supprimer")
-    button.addEventListener("click", () => {
-        // Suppression de la <li>
-        li.remove();
-
-        // Suppression de l'élément dans la liste de film
-        const index = movies.indexOf(movie)
-        movies.splice(index, 1)
-
-        // Rafraichit le compteur
-        console.log(movies)
-        updateCounter(movies)
-    })
+    button.addEventListener("click", () => onDelete(li, movie))
 
     // Assemble le li
     li.appendChild(title);

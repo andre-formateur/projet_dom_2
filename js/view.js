@@ -62,10 +62,46 @@ genreFilter.addEventListener("change", () => applyFilters())
 // Nos functions
 function createMovieElement(movie) {
 
-    const li = buildMovieItem(movie)
+    const li = buildMovieItem(movie, onMouseEnterItem, onMouseLeaveItem, onDeleteItem, onCheckItem)
 
     // Mettre le li dans le ul
     movieList.appendChild(li);
+
+}
+
+function onMouseEnterItem(genre) {
+    const hoverInfo = document.querySelector('#hover-info');
+    hoverInfo.textContent = genre
+}
+
+function onMouseLeaveItem() {
+    const hoverInfo = document.querySelector('#hover-info');
+    hoverInfo.textContent = "";
+}
+
+function onDeleteItem(li, movie) {
+    // Suppression de la <li>
+    li.remove();
+
+    // Suppression de l'élément dans la liste de film
+    const index = movies.indexOf(movie)
+    movies.splice(index, 1)
+
+    // Rafraichit le compteur
+    console.log(movies)
+    updateCounter(movies)
+}
+
+function onCheckItem(li, movie) {
+
+    // Afficher l'élément barré dans le navigateur
+    li.classList.toggle("is-watched");
+
+    // Modifier le vu dans la liste
+    movie.watched = !movie.watched
+
+    // Rafraichir le compteur
+    updateCounter(movies)
 
 }
 
