@@ -1,19 +1,12 @@
 import { buildMovieItem } from "./builder.js";
-import { getAllMovies, checkMovie, setMovie, deleteMovie, filterMovies } from "./model.js";
 
-// Les constantes globals
-const movieForm = document.querySelector("#movie-form");
-const searchInput = document.querySelector("#search-input")
-const genreFilter = document.querySelector("#genre-filter")
+// Les constantes globales (éléments du DOM)
+export const movieForm = document.querySelector("#movie-form");
+export const searchInput = document.querySelector("#search-input");
+export const genreFilter = document.querySelector("#genre-filter");
 
-// Function
-function onPageLoad() {
-    const movies = getAllMovies();
-    movies.forEach(movie => createMovieElement(movie))
-    updateCounter(movies)
-}
-
-function createMovieElement(movie) {
+// Ajout d'un film dans la liste
+export function createMovieElement(movie, onDeleteItem, onCheckItem) {
 
     const li = buildMovieItem(movie, onMouseEnterItem, onMouseLeaveItem, onDeleteItem, onCheckItem)
 
@@ -22,6 +15,7 @@ function createMovieElement(movie) {
 
 }
 
+// Survol d'un film : affichage du genre
 function onMouseEnterItem(genre) {
     const hoverInfo = document.querySelector('#hover-info');
     hoverInfo.textContent = genre
@@ -32,34 +26,18 @@ function onMouseLeaveItem() {
     hoverInfo.textContent = "";
 }
 
-function onDeleteItem(li, movie) {
-    // Suppression de la <li>
+// Suppression de la <li>
+export function removeMovieElement(li) {
     li.remove();
-
-    // Suppression de l'élément dans la liste de film
-    deleteMovie(movie)
-
-    // Rafraichit le compteur
-    updateCounter()
 }
 
-function onCheckItem(li, movie) {
-
-    // Afficher l'élément barré dans le navigateur
+// Afficher l'élément barré dans le navigateur
+export function toggleWatchedElement(li) {
     li.classList.toggle("is-watched");
-
-    // Modifier le vu dans la liste
-    checkMovie(movie);
-
-    // Rafraichir le compteur
-    updateCounter()
-
 }
 
-function updateCounter() {
-    // Créer le compteur
-    const movies = getAllMovies();
-
+// Affichage du compteur
+export function renderCounter(movies) {
     const counter = document.querySelector("#counter");
     const watchedCount = movies
                         .filter(movie => movie.watched)
@@ -68,16 +46,16 @@ function updateCounter() {
     counter.textContent = `${movies.length} film(s), dont ${watchedCount} vu(s)`
 }
 
-function applyFilters() {
+// Récupérer les saisies des filtres
+export function getFilterValues() {
+    return {
+        searchValue: searchInput.value,
+        selectedGenre: genreFilter.value
+    }
+}
 
-    // Récupérer les saisies
-    const searchValue = searchInput.value;
-    const selectedGenre = genreFilter.value;
-
-    // Récupération des résultats
-    const filteredMovies = filterMovies(searchValue, selectedGenre)
-
-    // Cacher les films qui n'ont pas le bon genre ET le bon titre
+// Cacher les films qui n'ont pas le bon genre ET le bon titre
+export function renderFilteredMovies(filteredMovies) {
     const movieItems = document.querySelectorAll("#movie-list li");
 
     movieItems.forEach(li => {
@@ -86,48 +64,21 @@ function applyFilters() {
             li.classList.remove("is-hidden")
         }
     })
-
 }
 
-onPageLoad();
-
-// Les eventListeners
-// Création d'un film
-movieForm.addEventListener("submit", (event) => {
-    // On bloque le comportement par défault du formulaire
-    event.preventDefault();
-
-    // Créer l'objet du film
+// Récupérer les champs du formulaire
+export function getFormValues() {
     const titleInput = document.querySelector("#title-input");
     const genreSelect = document.querySelector("#genre-select");
 
-    // Vérifie que titre n'est pas vide
-    // S'il est vide, alors le résultat de la fonction sera true
-    // Et donc il ne lancera pas le reste de la fonction
-    if(!titleInput.value.trim()) {
-        return;
-    }
-
-    const movie = {
+    return {
         title: titleInput.value,
-        genre: genreSelect.value,
-        watched: false
+        genre: genreSelect.value
     }
+}
 
-    // Ajouter le films en BDD
-    setMovie(movie)
-
-    // Créer l'élément du DOM
-    createMovieElement(movie);
-
-    // Rafraichir le compteur
-    updateCounter();
-
+// Vider le champ titre
+export function resetForm() {
+    const titleInput = document.querySelector("#title-input");
     titleInput.value = "";
-})
-
-// Filtrer les films par saisie
-searchInput.addEventListener("input", () => applyFilters())
-
-// Filtrer les films par genre
-genreFilter.addEventListener("change", () => applyFilters())
+}
